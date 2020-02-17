@@ -4,7 +4,7 @@
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "InstanceProfileName": "s3-full-access-instance-profile",
-        "Roles": ["s3FullAccessRole"]
+        "Roles": ["s3Ec2Role"]
       }
     },
     "awsS3Ec2Instance": {
@@ -33,6 +33,49 @@
             ]
           }
         }
+      }
+    },
+    "s3Ec2Policy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "s3-ec2-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "S3EC2Policy",
+              "Effect": "Allow",
+              "Action": [
+                "s3:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "s3Ec2Role": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          { "Ref": "s3Ec2Policy"
+          }
+        ],
+        "RoleName": "s3Ec2Role"
       }
     }
   }
