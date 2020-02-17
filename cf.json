@@ -1,0 +1,39 @@
+{
+  "Resources": {
+    "awsS3Ec2Profile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "InstanceProfileName": "s3-full-access-instance-profile",
+        "Roles": ["s3FullAccessRole"]
+      }
+    },
+    "awsS3Ec2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "IamInstanceProfile": "s3-full-access-instance-profile",
+        "ImageId": "ami-0ff8a91507f77f867",
+        "InstanceType": "t2.micro",
+        "Monitoring": true,
+        "KeyName": "aws-s3-ec2-kp",
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "yum -y update\n",
+                "yum -y install git\n",
+                "yum -y install python\n",
+                "pip install flask\n",
+                "pip install boto3\n",
+                "git clone https://github.com/rrruko/aws-s3-ec2.git\n",
+                "cd aws-s3-ec2\n",
+                "python -m flask run --host=0.0.0.0\n"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  }
+}
