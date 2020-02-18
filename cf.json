@@ -1,7 +1,33 @@
 {
   "Resources": {
+    "s3Ec2Role": {
+      "Type": "AWS::IAM::Role",
+      "DependsOn": ["s3Ec2Policy"],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          { "Ref": "s3Ec2Policy"
+          }
+        ],
+        "RoleName": "s3Ec2Role"
+      }
+    },
     "awsS3Ec2Profile": {
       "Type": "AWS::IAM::InstanceProfile",
+      "DependsOn": ["s3Ec2Role"],
       "Properties": {
         "InstanceProfileName": "s3-full-access-instance-profile",
         "Roles": ["s3Ec2Role"]
@@ -9,6 +35,7 @@
     },
     "awsS3Ec2Instance": {
       "Type": "AWS::EC2::Instance",
+      "DependsOn": ["awsS3Ec2Profile"],
       "Properties": {
         "IamInstanceProfile": "s3-full-access-instance-profile",
         "ImageId": "ami-0ff8a91507f77f867",
@@ -52,30 +79,6 @@
             }
           ]
         }
-      }
-    },
-    "s3Ec2Role": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ec2.amazonaws.com"
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "ManagedPolicyArns": [
-          { "Ref": "s3Ec2Policy"
-          }
-        ],
-        "RoleName": "s3Ec2Role"
       }
     }
   }
