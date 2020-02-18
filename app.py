@@ -1,5 +1,6 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 import boto3
+import json
 
 BUCKET_NAME = 'cs493-joneetha-music'
 
@@ -7,7 +8,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def serve():
-  return jsonify(get_music_obj())
+  resp = Response(json.dumps(get_music_obj()))
+  resp.headers['Access-Control-Allow-Origin'] = '*'
+  return resp
 
 def get_music_obj():
   session = boto3.Session()
