@@ -33,4 +33,5 @@ def lookup_ddb(key):
       },
     }
   )
+  response = [item['SK']['S'] for item in response['Items']]
   return str(response)
