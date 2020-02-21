@@ -16,6 +16,14 @@ def albums_for_artist():
 def artists_for_genre():
   return respond('genre')
 
+@app.route('/song')
+def song():
+  return respond('song')
+
+@app.route('/genres')
+def genres():
+  return lookup_ddb('genre')
+
 def respond(arg):
   arg = request.args.get(arg, '')
   response = Response(lookup_ddb(arg))
