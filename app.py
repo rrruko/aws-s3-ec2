@@ -22,7 +22,9 @@ def song():
 
 @app.route('/genres')
 def genres():
-  return lookup_ddb('genre')
+  response = Response(lookup_ddb('genre'))
+  response.headers['Access-Control-Allow-Origin'] = '*'
+  return response
 
 def respond(arg):
   arg = request.args.get(arg, '')
