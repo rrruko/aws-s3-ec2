@@ -73,7 +73,8 @@
               "Sid": "S3EC2Policy",
               "Effect": "Allow",
               "Action": [
-                "s3:*"
+                "s3:*",
+                "dynamodb:*"
               ],
               "Resource": "*"
             }
