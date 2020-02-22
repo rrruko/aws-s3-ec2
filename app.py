@@ -33,7 +33,7 @@ def respond(arg):
   return response
 
 def lookup_ddb(key):
-  ddb = boto3.client('dynamodb')
+  ddb = boto3.client('dynamodb', region_name='us-east-1')
   response = ddb.query(
     TableName='music',
     KeyConditionExpression='PK = :v1',
