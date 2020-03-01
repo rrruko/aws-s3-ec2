@@ -26,6 +26,11 @@ def genres():
   response.headers['Access-Control-Allow-Origin'] = '*'
   return response
 
+@app.route('/add-user', methods=['POST'])
+def add_user():
+  print(request.json)
+  return ""
+
 def respond(arg):
   arg = request.args.get(arg, '')
   response = Response(lookup_ddb(arg))
