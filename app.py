@@ -29,7 +29,7 @@ def genres():
 @app.route('/add-user', methods=['POST'])
 def add_user():
   ddb = boto3.resource('dynamodb', region_name='us-east-1').Table('music')
-  print(f'request data: {request.get_data()}')
+  print('request data: ' + request.get_data())
   j = json.loads(request.get_data())
   try:
     item = {
