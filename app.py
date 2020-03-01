@@ -28,8 +28,18 @@ def genres():
 
 @app.route('/add-user', methods=['POST'])
 def add_user():
-  print(request.json)
-  return ""
+  ddb = boto3.resource('dynamodb', region_name='us-east-1').Table('music')
+  try:
+    item = {
+      'id': request.json['id'],
+      'email': request.json['email'],
+      'name': request.json['name']
+    }
+    print(item)
+    ddb.put_item(TableName='users', Item=item)
+    return ""
+  except LookupError:
+    return "Need an id, email, and name", 400
 
 def respond(arg):
   arg = request.args.get(arg, '')
