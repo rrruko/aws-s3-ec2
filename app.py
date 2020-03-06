@@ -26,23 +26,6 @@ def genres():
   response.headers['Access-Control-Allow-Origin'] = '*'
   return response
 
-@app.route('/add-user', methods=['POST'])
-def add_user():
-  ddb = boto3.resource('dynamodb', region_name='us-east-1').Table('music')
-  print('request data: ' + request.get_data())
-  j = json.loads(request.get_data())
-  try:
-    item = {
-      'id': j['id'],
-      'email': j['email'],
-      'name': j['name']
-    }
-    print(item)
-    ddb.put_item(TableName='users', Item=item)
-    return ""
-  except LookupError:
-    return "Need an id, email, and name", 400
-
 def respond(arg):
   arg = request.args.get(arg, '')
   response = Response(lookup_ddb(arg))
